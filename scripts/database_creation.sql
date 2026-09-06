@@ -1,6 +1,10 @@
 /*
+================================================================================
 Description : Creates the DataWarehouse database and its Bronze, Silver, and
               Gold schemas used for organizing the data warehouse layers.
+
+WARNING : This script may DROP existing tables before recreating them.
+================================================================================
 */
 USE master;
 GO
