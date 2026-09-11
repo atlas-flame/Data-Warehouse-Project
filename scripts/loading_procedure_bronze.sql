@@ -1,3 +1,15 @@
+/*
+===============================================================================
+Purpose:
+    This stored procedure loads data from the CRM and ERP source CSV files
+    into the Bronze layer tables of the DataWarehouse database.
+
+    It truncates existing Bronze data before each load, handles errors
+    independently for each table, and records the execution time for
+    each table as well as the overall Bronze layer load.
+
+===============================================================================
+*/
 CREATE OR ALTER PROCEDURE bronze.load_bronze AS
 BEGIN
 
