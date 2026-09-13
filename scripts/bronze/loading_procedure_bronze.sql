@@ -117,10 +117,24 @@ SET @overall_start_time = GETDATE();
     BEGIN TRY
 
         SET @start_time = GETDATE();
+        CREATE TABLE #crm_sales_details_stage
+        (
+        sls_ord_num   VARCHAR(50),
+        sls_prd_key   VARCHAR(50),
+        sls_cust_id   VARCHAR(50),
+        sls_order_dt  VARCHAR(50),
+        sls_ship_dt   VARCHAR(50),
+        sls_due_dt    VARCHAR(50),
+        sls_sales     VARCHAR(50),
+        sls_quantity  VARCHAR(50),
+        sls_price     VARCHAR(50)
+        );
 
         TRUNCATE TABLE bronze.crm_sales_details;
+        TRUNCATE TABLE #crm_sales_details_stage;
 
-        BULK INSERT bronze.crm_sales_details
+        
+        BULK INSERT #crm_sales_details_stage
         FROM 'C:\Users\Aaron\OneDrive\Desktop\sql-data-warehouse-project\datasets\source_crm\sales_details.csv'
         WITH
         (
@@ -128,6 +142,31 @@ SET @overall_start_time = GETDATE();
             FIELDTERMINATOR = ',',
             TABLOCK
         );
+    
+        INSERT INTO bronze.crm_sales_details
+        (
+            sls_ord_num,
+            sls_prd_key,
+            sls_cust_id,
+            sls_order_dt,
+            sls_ship_dt,
+            sls_due_dt,
+            sls_sales,
+            sls_quantity,
+            sls_price
+        )
+        SELECT
+            sls_ord_num,
+            sls_prd_key,
+            TRY_CONVERT(INT, sls_cust_id),
+            TRY_CONVERT(DATE, sls_order_dt, 112),
+            TRY_CONVERT(DATE, sls_ship_dt, 112),
+            TRY_CONVERT(DATE, sls_due_dt, 112),
+            TRY_CONVERT(INT, sls_sales),
+            TRY_CONVERT(INT, sls_quantity),
+            TRY_CONVERT(INT, sls_price)
+        FROM bronze.crm_sales_details_stage;
+
 
         SET @end_time = GETDATE();
 
