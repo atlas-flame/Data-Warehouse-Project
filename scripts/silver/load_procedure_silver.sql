@@ -449,7 +449,7 @@ BEGIN
             maintenance
         )
         SELECT
-            REPLACE(id, '_', '-'),
+            id,
             cat,
             subcat,
             maintenance
