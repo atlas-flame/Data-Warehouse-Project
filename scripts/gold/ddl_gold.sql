@@ -13,6 +13,7 @@ Views Created:
 
 Notes:
     - Views are built from cleaned Silver layer tables.
+    - Existing views are dropped before recreation.
     - Customer and product keys are generated using ROW_NUMBER().
     - Only currently active products (prd_end_dt IS NULL) are included.
 ===============================================================================
@@ -22,6 +23,11 @@ Notes:
 -- ============================================================
 -- Create Customer Dimension
 -- ============================================================
+
+IF OBJECT_ID('gold.dim_customers', 'V') IS NOT NULL
+    DROP VIEW gold.dim_customers;
+
+GO
 
 CREATE VIEW gold.dim_customers AS
 SELECT
@@ -52,6 +58,11 @@ GO
 -- Create Product Dimension
 -- ============================================================
 
+IF OBJECT_ID('gold.dim_products', 'V') IS NOT NULL
+    DROP VIEW gold.dim_products;
+
+GO
+
 CREATE VIEW gold.dim_products AS
 SELECT
       ROW_NUMBER() OVER (
@@ -80,6 +91,11 @@ GO
 -- ============================================================
 -- Create Sales Fact
 -- ============================================================
+
+IF OBJECT_ID('gold.fact_sales', 'V') IS NOT NULL
+    DROP VIEW gold.fact_sales;
+
+GO
 
 CREATE VIEW gold.fact_sales AS
 SELECT
