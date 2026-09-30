@@ -29,7 +29,7 @@ Notes:
 ===============================================================================
 */
 
-CREATE VIEW gold.report_products AS 
+CREATE OR ALTER VIEW gold.report_products AS 
 WITH information AS (
     SELECT
         s.order_number,
